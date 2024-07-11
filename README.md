@@ -31,6 +31,12 @@ Two letters in the file names represent:
 400: Same to 40, with clock-like input
 500: Same to 50, with clock-like input. 
 
+Train_data Datasets:
+train_data_const_amp.csv: Amplitude = 40(const), Period changing(40-100), clock-like input
+train_data_const_period.csv: Amplitude changing (20-80), Period = 80(const), clock-like input
+train_data_sine_hpc.csv:  Amplitude changing (20-80), Period changing(40-100), clock-like input
+
+Spike_gen: File to create Train_data Datasets 
 
 Terminology: 
 Clock-like Input: A vector of ints from 0 to period-1, repeated with the length of num_timesteps. If num_timesteps = 300, and if period = 80. Clock-like input: [0,1...79,0,1...79,0,1...79,0...59] (len 300)
