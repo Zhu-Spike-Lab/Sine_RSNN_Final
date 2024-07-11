@@ -1,9 +1,10 @@
 In the main directory, there are 19 jupyter notebooks each numbered from 00 to 500. They all run a different experiment on our Sine Wave Task. Here are a summary of what each file does:
 
+--------------------------------------------------------------------------------------
+
 Two letters in the file names represent:
 [first digit] = Sine_Wave_Dataset #
 [second digit] = Loss func # (task loss = 0, task + rate loss = 1)
-
 
 00: Changing Amplitude (20-80), Clock-like Input. (Period=80, not provided to input) Loss: Task loss
 01: Changing Amplitude (20-80), Clock-like Input. (Period=80, not provided to input) Loss: Task + Rate loss
@@ -31,12 +32,32 @@ Two letters in the file names represent:
 400: Same to 40, with clock-like input
 500: Same to 50, with clock-like input. 
 
+--------------------------------------------------------------------------------------
 Train_data Datasets:
 train_data_const_amp.csv: Amplitude = 40(const), Period changing(40-100), clock-like input
 train_data_const_period.csv: Amplitude changing (20-80), Period = 80(const), clock-like input
 train_data_sine_hpc.csv:  Amplitude changing (20-80), Period changing(40-100), clock-like input
 
+--------------------------------------------------------------------------------------
 Spike_gen: File to create Train_data Datasets 
+--------------------------------------------------------------------------------------
+PlotMP: Function that Plots everyhthing after running the notebooks and saving to dataMP
+--------------------------------------------------------------------------------------
+Classes:
+train1.py: the training function that runs and saves intended parameters dataMP
+RSNN2.py: RSNN with 2 input neurons
+RSNN3.py: RSNN with 3 input neurons
+RLIF1.py: the recurrent leaky neuron model with updated functionalities:
+    1- Refractory Period = 5ms
+    2- Normally distributed initial Membrane Potential 
+    3- Reset at -70. Threshold at -55.
+
+    RLIF1 is the main updated file. LIF1 and SpikingNeuron1 is are the same as original except SpikingNeuron1 uses new function atan1 (that is compatible with python multiprocessing) instead of Torch atan. (atan1 function in helper1.py file)
+
+Atan1.py & ATanSurrogate1.py make use of atan1 funciton in helper 1 that is compatible with multiprocessing
+helper1.py has all the helper functions.
+
+--------------------------------------------------------------------------------------
 
 Terminology: 
 Clock-like Input: A vector of ints from 0 to period-1, repeated with the length of num_timesteps. If num_timesteps = 300, and if period = 80. Clock-like input: [0,1...79,0,1...79,0,1...79,0...59] (len 300)
