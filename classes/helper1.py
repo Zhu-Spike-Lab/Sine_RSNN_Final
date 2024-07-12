@@ -59,6 +59,67 @@ def hid_mx(rows, columns, num_excitatory, num_inhibitory):
 
     return torch.tensor(weight_matrix.astype(np.float32))
 
+# creates an excitatory and inhibitory matrix
+def hid_mx3I(num_excitatory, num_inhibitory, num_iPV, num_iSst, num_iHtr, p_nn):
+
+    # Why are there so many neurons :( 
+
+    # Initialize the weight matrix
+    weight_matrix = np.zeros((num_excitatory + num_inhibitory, num_excitatory + num_inhibitory))
+
+    # Excitatory connections
+
+    # excitatory to excitatory
+    weight_matrix[:num_excitatory, :num_excitatory] = np.random.choice([0, 1], size=(num_excitatory, num_excitatory), p=[1-p_nn['e_e'], p_nn['e_e']])
+    # excitatory to inhibitory PV
+    weight_matrix[:num_excitatory, num_excitatory:num_excitatory+num_iPV] = np.random.choice([0, 1], size=(num_excitatory, num_iPV), p=[1-p_nn['e_PV'], p_nn['e_PV']])
+    # excitatory to inhibitory Sst
+    weight_matrix[:num_excitatory, num_excitatory+num_iPV:num_excitatory+num_iPV+num_iSst] = np.random.choice([0, 1], size=(num_excitatory, num_iSst), p=[1-p_nn['e_Sst'], p_nn['e_Sst']])
+    # excitatory to inhibitory Htr
+    weight_matrix[:num_excitatory, num_excitatory+num_iPV+num_iSst:] = np.random.choice([0, 1], size=(num_excitatory, num_iHtr), p=[1-p_nn['e_Htr'], p_nn['e_Htr']])
+
+
+    # Inhibitory connections
+
+    # inhibitory PV to excitatory
+    weight_matrix[num_excitatory:num_excitatory+num_iPV, :num_excitatory] = np.random.choice([0, -1], size=(num_iPV, num_excitatory), p=[1-p_nn['PV_e'], p_nn['PV_e']])
+    # inhibitory PV to inhibitory PV
+    weight_matrix[num_excitatory:num_excitatory+num_iPV, num_excitatory:num_excitatory+num_iPV] = np.random.choice([0, -1], size=(num_iPV, num_iPV), p=[1-p_nn['PV_PV'], p_nn['PV_PV']])
+    # inhibitory PV to inhibitory Htr
+    weight_matrix[num_excitatory:num_excitatory+num_iPV, num_excitatory+num_iPV:num_excitatory+num_iPV+num_iSst] = np.random.choice([0, -1], size=(num_iPV, num_iSst), p=[1-p_nn['PV_Sst'], p_nn['PV_Sst']])
+    # inhibitory PV to inhibitory Sst
+    weight_matrix[num_excitatory:num_excitatory+num_iPV, num_excitatory+num_iPV+num_iSst:] = np.random.choice([0, -1], size=(num_iPV, num_iHtr), p=[1-p_nn['PV_Htr'], p_nn['PV_Htr']]) 
+
+    # inhibitory Sst to excitatory
+    weight_matrix[num_excitatory+num_iPV:num_excitatory+num_iPV+num_iSst, :num_excitatory] = np.random.choice([0, -1], size=(num_iSst, num_excitatory), p=[1-p_nn['Sst_e'], p_nn['Sst_e']])
+    # inhibitory Sst to inhibitory PV
+    weight_matrix[num_excitatory+num_iPV:num_excitatory+num_iPV+num_iSst, num_excitatory:num_excitatory+num_iPV] = np.random.choice([0, -1], size=(num_iSst, num_iPV), p=[1-p_nn['Sst_PV'], p_nn['Sst_PV']])
+    # inhibitory Sst to inhibitory Htr
+    weight_matrix[num_excitatory+num_iPV:num_excitatory+num_iPV+num_iSst, num_excitatory+num_iPV:num_excitatory+num_iPV+num_iSst] = np.random.choice([0, -1], size=(num_iSst, num_iSst), p=[1-p_nn['Sst_Sst'], p_nn['Sst_Sst']])
+    # inhibitory Sst to inhibitory Sst
+    weight_matrix[num_excitatory+num_iPV:num_excitatory+num_iPV+num_iSst, num_excitatory+num_iPV+num_iSst:] = np.random.choice([0, -1], size=(num_iSst, num_iHtr), p=[1-p_nn['Sst_Htr'], p_nn['Sst_Htr']]) 
+
+    # inhibitory Sst to excitatory
+    weight_matrix[num_excitatory+num_iPV+num_iSst:, :num_excitatory] = np.random.choice([0, -1], size=(num_iHtr, num_excitatory), p=[1-p_nn['Htr_e'], p_nn['Htr_e']])
+    # inhibitory Sst to inhibitory PV
+    weight_matrix[num_excitatory+num_iPV+num_iSst:, num_excitatory:num_excitatory+num_iPV] = np.random.choice([0, -1], size=(num_iHtr, num_iPV), p=[1-p_nn['Htr_PV'], p_nn['Htr_PV']])
+    # inhibitory Sst to inhibitory Htr
+    weight_matrix[num_excitatory+num_iPV+num_iSst:, num_excitatory+num_iPV:num_excitatory+num_iPV+num_iSst] = np.random.choice([0, -1], size=(num_iHtr, num_iSst), p=[1-p_nn['Htr_Sst'], p_nn['Htr_Sst']])
+    # inhibitory Sst to inhibitory Sst
+    weight_matrix[num_excitatory+num_iPV+num_iSst:, num_excitatory+num_iPV+num_iSst:] = np.random.choice([0, -1], size=(num_iHtr, num_iHtr), p=[1-p_nn['Htr_Htr'], p_nn['Htr_Htr']]) 
+
+
+    # Initialize non-zero values using log normal distribution
+    mu = -0.64
+    sigma = 0.51
+    non_zero_indices = np.where(weight_matrix != 0)
+    weight_matrix[non_zero_indices] = np.random.lognormal(mean=mu, sigma=sigma, size=non_zero_indices[0].shape)
+
+    # Multiply the last num_inhibitory rows by -10
+    weight_matrix[-num_inhibitory:, :] *= -10
+
+    return torch.tensor(weight_matrix.astype(np.float32))
+
 #plots spike rasters given spike array(time x neuron)
 def plot_spike_tensor(spk_tensor, title):
     # Generate the plot
