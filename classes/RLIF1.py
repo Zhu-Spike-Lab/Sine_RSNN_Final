@@ -1,6 +1,13 @@
 from classes.LIF1 import LIF1
 import torch
 import torch.nn as nn
+
+'''Recurrent Leaky Integrate and Fire class that uses LIF1 with real neurobiological dynamics:
+* (-70) resetting membrane potential
+* (-55) firing threshold
+* initial normal distribution of membrane potentials
+* refractory period of 5
+'''
 class RLIF1(LIF1):
     def __init__(
         self,

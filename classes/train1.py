@@ -2,7 +2,7 @@ import torch
 from classes.helper1 import simple_branching_param, fano_factor, count_spikes
 import numpy as np
 
-
+#function to train and save the variables to npz files!
 def train_model(args):
     model_idx, model, optimizer, dataloader,step_dataloader, criterion, criterium_idx, num_epochs, num_timesteps= args
     model.train()

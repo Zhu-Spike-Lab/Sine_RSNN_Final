@@ -6,9 +6,13 @@ from snntorch import spikeplot as splt
 import matplotlib.pyplot as plt
 from classes.ATanSurrogate1 import ATanSurrogate1
 
-def conn_mx(rows, columns, sparseness):
+
+'''all helper functions that we need'''
+
+#creates a weight matrix given sparsity with log-normal distribution of values
+def conn_mx(rows, columns, sparsity):
     # Calculate the number of non-zero entries based on sparseness
-    num_non_zero_entries = int(rows * columns * sparseness)
+    num_non_zero_entries = int(rows * columns * sparsity)
 
     # Initialize the matrix with zeros
     conn_mx = torch.zeros(rows, columns)
@@ -25,7 +29,7 @@ def conn_mx(rows, columns, sparseness):
     return conn_mx
 
 
-# creates an excitatory and inhibitory matrix
+# creates an excitatory and inhibitory matrix with sparsity and lognormal distribution hardcoded
 def hid_mx(rows, columns, num_excitatory, num_inhibitory):
     # hard coded sparsity
 
@@ -55,7 +59,7 @@ def hid_mx(rows, columns, num_excitatory, num_inhibitory):
 
     return torch.tensor(weight_matrix.astype(np.float32))
 
-
+#plots spike rasters given spike array(time x neuron)
 def plot_spike_tensor(spk_tensor, title):
     # Generate the plot
     spk_tensor = spk_tensor.T
@@ -71,6 +75,7 @@ def plot_spike_tensor(spk_tensor, title):
 
     plt.show()
 
+#calculate criticality given spike recording and (size of each time bin)
 def simple_branching_param(bin_size, spikes):  # spikes in shape of [units, time]
     run_time = spikes.shape[1]
     nbins = spikes.shape[1]
@@ -119,9 +124,11 @@ def fano_factor(seq_len, spike):
     n_fano = torch.mean(fano_all)
     return n_fano
 
+#function calculating arctangent that is used in SpikingNeuron1.py
 def atan1(alpha=2.0):
     """ArcTan surrogate gradient enclosed with a parameterized slope."""
     return ATanSurrogate1(alpha)
 
+#counts total number of spikes
 def count_spikes(tensor):
     return torch.count_nonzero(tensor).item()

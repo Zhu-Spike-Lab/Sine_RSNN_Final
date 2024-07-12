@@ -5,6 +5,7 @@ from classes.helper1 import conn_mx, hid_mx
 from classes.RLIF1 import RLIF1
 import numpy as np
 
+# RSNN class that takes 2 inputs
 class RSNN2(nn.Module):
     def __init__(self):
         super(RSNN2, self).__init__()
@@ -59,6 +60,9 @@ class RSNN2(nn.Module):
 
         return self.cur2_rec, self.spk1_rec
 
+    # maintain that weights projected from excitatory neurons remain positive and
+    # weights projected from inhibitory neurons remain negative
+    # for any weight switching sign, initializes a new weight from normal dist
     def positive_negative_weights(self):
 
         excitatory_weights = self.rlif1.recurrent.weight.data[:, :self.num_excitatory]

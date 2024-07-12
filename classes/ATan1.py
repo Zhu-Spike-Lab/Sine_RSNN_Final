@@ -1,5 +1,6 @@
 import torch
 
+#arc tangent class to be used by atan1 function in helper1
 class ATan1(torch.autograd.Function):
     """
     Surrogate gradient of the Heaviside step function.

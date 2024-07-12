@@ -33,6 +33,19 @@ Two letters in the file names represent:
 500: Same to 50, with clock-like input. 
 
 --------------------------------------------------------------------------------------
+Sine_Wave_Dataset
+# L0: Changing Amplitude (20-80), Clock-like Input. (Period=80, not provided to input)
+# L1: Changing Amplitude (20-80), Changing Period (40-100), Clock-like Input
+# L2: Changing Amplitude (20-80), Changing Period (40-100), Clock-like Input (Non-Resetting)
+# L3: Changing Amplitude (20-80), Changing Period (40-100)
+# L4: Changing Amplitude (20-80), Changing Period (40-100),  Limited time input
+# L5: Changing Amplitude (20-80), Changing Period (40-100),  Noisy Input
+# L6: Changing Period (40-100), Clock-like Input,  (Amplitude=40, not provided to input)
+# L100: Changing Amplitude (20-80), Changing Period (40-100) (transfer learning to learn for non-clocklike input)
+# L400: Changing Amplitude (20-80), Changing Period (40-100), Clock-like Input  Limited time input
+# L500: Changing Amplitude (20-80), Changing Period (40-100), Clock-like Input  Noisy input
+
+--------------------------------------------------------------------------------------
 Train_data Datasets:
 train_data_const_amp.csv: Amplitude = 40(const), Period changing(40-100), clock-like input
 train_data_const_period.csv: Amplitude changing (20-80), Period = 80(const), clock-like input

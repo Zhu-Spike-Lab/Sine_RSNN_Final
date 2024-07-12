@@ -4,6 +4,10 @@ from classes.helper1 import atan1
 from warnings import warn
 
 
+# lower level spiking neuron class using pytorch.nn
+# utilizes atan1 function to calculate spike gradients
+# imports other relevant atan funcitons in order to tackle locally defined function error 
+# for implementing multiprocessing with python
 class SpikingNeuron1(nn.Module):
     """Parent class for spiking neuron models."""
 

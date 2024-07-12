@@ -1,6 +1,8 @@
 from classes.SpikingNeuron1 import SpikingNeuron1
 import torch
 import torch.nn as nn
+
+#LIF1 class utilizing SpikingNeuron1
 class LIF1(SpikingNeuron1):
     """Parent class for leaky integrate and fire neuron models."""
 

@@ -2,7 +2,7 @@ from torch.utils.data import Dataset, DataLoader
 import torch
 import pandas as pd
 
-# L2: Explicit Time No-Reset
+# L2: Changing Amplitude (20-80), Changing Period (40-100), Clock-like Input (Non-Resetting)
 class SineWaveDataset2(Dataset):
     def __init__(self, csv_file):
         self.data = pd.read_csv(csv_file)

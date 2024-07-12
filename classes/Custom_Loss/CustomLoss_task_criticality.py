@@ -1,6 +1,7 @@
 import torch.nn as nn
 import torch
 
+#includes task + criticality loss
 class CustomLoss_task_criticality(nn.Module):
 
     def __init__(self, target_firing_rate=0.02, target_synchrony=1.4,target_branching=1.0,batch_size=25):

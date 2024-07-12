@@ -2,7 +2,7 @@ from torch.utils.data import Dataset, DataLoader
 import torch
 import pandas as pd
 
-# L5: Noisy A,P throughout + Time Vector
+# L500: Changing Amplitude (20-80), Changing Period (40-100), Clock-like Input  Noisy input
 class SineWaveDataset50(Dataset):
     def __init__(self, csv_file):
         self.data = pd.read_csv(csv_file)
